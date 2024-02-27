@@ -17,7 +17,7 @@ This Python script is a subdomain enumerator that queries DNS for each combinati
 6. Run the script using the command:
 
    ```bash
-   python script_name.py
+   dns_subdomain_enumerator.py
    ```
 
 ## Features
