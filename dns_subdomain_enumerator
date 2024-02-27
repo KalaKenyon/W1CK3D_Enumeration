@@ -1,0 +1,30 @@
+import asyncio
+import aiohttp
+
+async def query_dns(session, url):
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                print(f"Subdomain found: {url}")
+    except aiohttp.ClientError as e:
+        print(f"Error querying DNS for {url}: {e}")
+
+async def main(wordlist, domain):
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for word in wordlist:
+            url = f"http://{domain}/{word}"
+            tasks.append(query_dns(session, url))
+            # Rate limiting: Sleep for a short duration between queries
+            await asyncio.sleep(0.1)  # Adjust sleep duration as needed
+
+        await asyncio.gather(*tasks)
+
+if __name__ == "__main__":
+    domain = "WEBSITEHERE.COM"
+    wordlist = []
+    with open("WORDLISTFILEHERE.txt", "r") as file:
+        for line in file:
+            wordlist.append(line.strip())
+
+    asyncio.run(main(wordlist, domain))
